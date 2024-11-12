@@ -6,7 +6,6 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_aws_key_pub: ${{ secrets.TF_VAR_aws_key_pub }}
 
-
 jobs:
   terraform_plan:
     name: Terraform Plan
@@ -20,3 +19,6 @@ jobs:
       - name: Terraform Plan
         run: |
           terraform init
+          terraform validade
+          terraform plan
+          
