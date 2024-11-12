@@ -7,7 +7,7 @@ env:
   TF_VAR_aws_key_pub: ${{ secrets.TF_VAR_aws_key_pub }}
 
 jobs:
-  terraform_destory:
+  terraform_destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
     defaults:
@@ -19,4 +19,4 @@ jobs:
       - name: Terraform Destroy
         run: |
           terraform init
-          terraform destory -auto-approve
+          terraform destroy -auto-approve
