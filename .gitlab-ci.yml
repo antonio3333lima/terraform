@@ -1,0 +1,51 @@
+stages:
+  - validate_plan
+  - import
+  - apply
+  - destroy
+
+.template:
+  image:
+    name: hashicorp/terraform:1.9
+    entrypoint: [""]
+  before_script:
+    - terraform init
+
+validate & plan:
+  extends: .template
+  stage: validate_plan
+  script:
+    - terraform init
+    - terraform validate
+    - terraform plan -out plan.out
+  cache:
+    key: plan
+    policy: push
+    paths:
+      - plan.out
+
+apply:
+  extends: .template
+  stage: apply
+  script:
+    - terraform init
+    - terraform import aws_key_pair.key aws-key-pipelines || true  # Importa o Key Pair se ele já existir
+    - terraform plan -out plan.out  # Recria o plano para garantir que esteja atualizado após o import
+    - terraform apply -auto-approve plan.out
+  dependencies:
+    - validate & plan
+  when: manual
+  allow_failure: false
+  cache:
+    key: plan
+    policy: pull
+    paths:
+      - plan.out
+    when: on_success
+
+destroy:
+  extends: .template
+  stage: destroy
+  script:
+    - terraform destroy -auto-approve
+  when: manual
