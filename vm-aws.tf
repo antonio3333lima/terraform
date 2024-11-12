@@ -1,5 +1,5 @@
 resource "aws_key_pair" "key" {
-  key_name   = "aws-key-pipelines"
+  key_name   = "aws-key-pipelines-unique"
   public_key = var.aws_key_pub
 }
 
